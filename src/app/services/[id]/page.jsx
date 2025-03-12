@@ -1,67 +1,34 @@
-import React from 'react';
+import DynamicPage from "@/components/DynamicPage";
+import SectionTitle from "@/components/SectionTitle";
+import dbConnect, { dataNames } from "@/lib/dbConnect";
+import { ObjectId } from "mongodb";
+import Image from "next/image";
 
-const ServicesDetailPage = ({ params }) => {
-    const id = params?.id
-    const data = [
-        {
-            "_id": "642c155b2c4774f05c36eeaa",
-            "name": "Haddock",
-            "recipe": "Chargrilled fresh tuna steak (served medium rare) on classic Niçoise salad with French beans.",
-            "image": "https://cristianonew.ukrdevs.com/wp-content/uploads/2016/08/product-1-370x247.jpg",
-            "category": "salad",
-            "price": 14.7
-        },
-        {
-            "_id": "642c155b2c4774f05c36eeb9",
-            "name": "Haddock",
-            "recipe": "Chargrilled fresh tuna steak (served medium rare) on classic Niçoise salad with French beans.",
-            "image": "https://cristianonew.ukrdevs.com/wp-content/uploads/2016/08/product-1-370x247.jpg",
-            "category": "drinks",
-            "price": 14.7
-        },
-        {
-            "_id": "642c155b2c4774f05c36ee7c",
-            "name": "Escalope de Veau",
-            "recipe": "Roasted duck breast (served pink) with gratin potato and a griottine cherry sauce",
-            "image": "https://cristianonew.ukrdevs.com/wp-content/uploads/2016/08/product-5-370x247.jpg",
-            "category": "popular",
-            "price": 14.5
-        },
-        {
-            "_id": "642c155b2c4774f05c36ee88",
-            "name": "Escalope de Veau",
-            "recipe": "Pan roasted haddock fillet wrapped in smoked French bacon with pea purée and tomato and chive vinaigrette",
-            "image": "https://cristianonew.ukrdevs.com/wp-content/uploads/2016/08/product-2-370x247.jpg",
-            "category": "dessert",
-            "price": 12.5
-        },
-        {
-            "_id": "642c155b2c4774f05c36ee7a",
-            "name": "Roast Duck Breast",
-            "recipe": "Roasted duck breast (served pink) with gratin potato and a griottine cherry sauce",
-            "image": "https://cristianonew.ukrdevs.com/wp-content/uploads/2016/08/product-5-370x247.jpg",
-            "category": "popular",
-            "price": 14.5
-        },
-    ]
-    const singleService = data.find((d) => d._id === id)
-    if(singleService){
-        return (
-            <div>
-                <h1>ServiceDetailPage</h1>
-                <p>ID: {id}</p>
-                <p>{singleService.name}</p>
-                <img src={singleService.image} alt="" />
-                <p>{singleService.recipe}</p>
-            </div>
-        );
-    }else{
-        return (
-            <>    
-            <p>Not Found Page</p>
-            </>
-        )
-    }
+const ServicesDetailsPage = async ({ params }) => {
+    const p = await params
+    const singleService = await dbConnect(dataNames.services).findOne({ _id: new ObjectId(p.id) })
+    return (
+        <div>
+            {/* banner section start*/}
+            <section className="relative">
+                <DynamicPage />
+                <SectionTitle toTitle={"Service Details"} boTitle={"Home/Service Details"} />
+            </section>
+            {/* banner section end*/}
+
+            {/* dynamic details start*/}
+            <section className="grid grid-cols-12 gap-4">
+                <div className="col-span-8">
+                    <Image src={singleService.img} width={800} height={50} alt={singleService.title} />
+                </div>
+                <div className="col-span-4">
+                    <h1 className="bg-[#ff3811] text-center text-[#fdfdfd]">Services</h1>
+                </div>
+            </section>
+            {/* dynamic details end*/}
+            <p>{JSON.stringify(singleService._id)}</p>
+        </div>
+    );
 };
 
-export default ServicesDetailPage;
+export default ServicesDetailsPage;
