@@ -1,9 +1,10 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "react-datepicker/dist/react-datepicker.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Toaster } from "react-hot-toast";
-import NextAuthProvider from "@/Providers/NextAuthProvider";
+import NextAuthSesstionProvider from "@/Providers/NextAuthSesstionProvider";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -25,14 +26,14 @@ export default function RootLayout({ children }) {
       <body
         className={`md:w-11/12 lg:w-10/12 mx-auto ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextAuthProvider>
+        <NextAuthSesstionProvider>
         <Navbar />
         <Toaster />
         <main className="min-h-[calc(100vh-305px)]">
         {children}
         </main>
         <Footer />
-        </NextAuthProvider>
+        </NextAuthSesstionProvider>
       </body>
     </html>
   );
